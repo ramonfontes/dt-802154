@@ -4,7 +4,7 @@ import time
 # Interface where real packets are captured
 REAL_IFACE = "wpan0"
 # Interface where packets will be forwarded (Digital Twin or another node)
-SEND_IFACE = "wpan1"
+SEND_IFACE = "sensor1-wpan0"
 
 def forward_packet(pkt):
     """

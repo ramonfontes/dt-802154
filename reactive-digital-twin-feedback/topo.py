@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-import sys
+import os
 
 from mininet.log import setLogLevel, info
+from mininet.term import makeTerm
 from mn_wifi.sixLoWPAN.link import LoWPAN
 from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
@@ -35,6 +36,7 @@ sensor3$ mosquitto_sub -h fe80::1%sensor3-pan0 -t topic
 def topology():
     "Create a network."
     net = Mininet_wifi()
+    path = os.path.dirname(os.path.abspath(__file__))
 
     info("*** Creating nodes\n")
     # There is no need to set the node position.
@@ -56,9 +58,9 @@ def topology():
                             storing_mode=2)
     sensor4 = net.addSensor('sensor4', ip6='fe80::4/64', panid='0xbeef',
                             storing_mode=1)
-
-    sensor10 = net.addSensor('sensor10', ip6='fe80::5/64', panid='0xbeef', dodag_root=True,
-                            dodagid='fd1c:be8a:173f:8e80::1', storing_mode=2, phy='wpan0', inNamespace=False)
+    sensor10 = net.addSensor('sensor10', ip6='fe80::10/64', panid='0xbeef',
+                             dodag_root=True, dodagid='fd1c:be8a:173f:8e80::1',
+                             storing_mode=2, phy='wpan0', inNamespace=False)
 
     info("*** Configuring nodes\n")
     net.configureNodes()
@@ -75,8 +77,14 @@ def topology():
     info("*** Configuring RPLD\n")
     net.configRPLD(net.sensors)
 
+    makeTerm(sensor10, title='gateway', cmd="bash -c 'python {}/receiver.py;'".format(path))
+    #makeTerm(sensor1, title='gateway', cmd="bash -c 'python {}/xxxxxxx.py;'".format(path))
+
     info("*** Running CLI\n")
     CLI(net)
+
+    info('*** Kill xterm terminals\n')
+    os.system('pkill -9 -f \"xterm\"')
 
     info("*** Stopping network\n")
     net.stop()

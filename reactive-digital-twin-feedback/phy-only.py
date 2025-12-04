@@ -34,6 +34,9 @@ def topology():
     info("*** Running CLI\n")
     CLI(net)
 
+    info('*** Kill xterm terminals\n')
+    os.system('pkill -9 -f \"xterm\"')
+
     info("*** Stopping network\n")
     net.stop()
 

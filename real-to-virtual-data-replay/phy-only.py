@@ -14,6 +14,7 @@ def topology():
     net = Mininet_wifi()
     path = os.path.dirname(os.path.abspath(__file__))
     ip6 = sys.argv[1]
+    node_id = sys.argv[2]
 
     info("*** Creating nodes\n")
     sensor1 = net.addSensor('sensor1', ip6=ip6, panid='0xbeef', dodag_root=False,
@@ -33,6 +34,9 @@ def topology():
 
     info("*** Running CLI\n")
     CLI(net)
+
+    info('*** Kill xterm terminals\n')
+    os.system('pkill -9 -f \"xterm\"')
 
     info("*** Stopping network\n")
     net.stop()

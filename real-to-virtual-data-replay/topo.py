@@ -51,7 +51,7 @@ def topology():
     # **** RPL_DIO_STORING_NO_MULTICAST = 2
     # **** RPL_DIO_STORING_MULTICAST = 3
     sensor1 = net.addSensor('sensor1', ip6='fe80::1/64', panid='0xbeef',
-                            dodag_root=True, storing_mode=2, inNamespace=False)
+                            dodag_root=True, storing_mode=2)
     sensor2 = net.addSensor('sensor2', ip6='fe80::2/64', panid='0xbeef',
                             storing_mode=2)
     sensor3 = net.addSensor('sensor3', ip6='fe80::3/64', panid='0xbeef',
@@ -77,7 +77,10 @@ def topology():
     info("*** Configuring RPLD\n")
     net.configRPLD(net.sensors)
 
-    makeTerm(sensor10, title='gateway', cmd="bash -c 'python {}/receiver.py;'".format(path))
+    makeTerm(sensor10, title='phy', cmd="bash -c 'python {}/receiver.py;'".format(path))
+    makeTerm(sensor1, title='gateway', cmd="bash -c 'python {}/gateway.py;'".format(path))
+    makeTerm(sensor1, title='tcpdump-virtual', cmd="bash -c 'tcpdump -i sensor1-pan0 -w {}/sensor1.pcap;'".format(path))
+    makeTerm(sensor10, title='tcpdump-phy', cmd="bash -c 'tcpdump -i lowpan0 -w {}/phy.pcap;'".format(path))
 
     info("*** Running CLI\n")
     CLI(net)

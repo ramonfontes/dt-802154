@@ -17,7 +17,7 @@ def topology():
 
     info("*** Creating nodes\n")
     sensor1 = net.addSensor('sensor1', ip6=ip6, panid='0xbeef', dodag_root=False,
-                            storing_mode=2, phy='wpan0', inNamespace=False)
+                            storing_mode=2, phy='wpan0', inNamespace=False, trickle_t=5)
 
     info("*** Configuring nodes\n")
     net.configureNodes()
@@ -29,7 +29,7 @@ def topology():
     info("*** Configuring RPLD\n")
     net.configRPLD(net.sensors)
 
-    makeTerm(sensor1, title='sensor1', cmd="bash -c 'python {}/send.py;'".format(path))
+    makeTerm(sensor1, title='sensor1', cmd="bash -c 'python {}/sniff.py;'".format(path))
 
     info("*** Running CLI\n")
     CLI(net)

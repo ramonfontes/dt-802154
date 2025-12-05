@@ -3,4 +3,4 @@ This repositoty includes a Digital Twin-oriented hybrid experimentation framewor
 
 The figure below illustrates the physical–virtual hybrid setup used in the Digital Twin-oriented experimentation framework. The environment combines a workstation running the virtual replica (including the IEEE 802.15.4 emulation, topology reconstruction modules, and real-time analytics) with multiple laptops connected to the testbed and responsible for orchestrating, monitoring, and injecting trace-driven events. This integrated setup supports the synchronized loop between real and virtual nodes, enabling real-time observation, control, and bidirectional feedback between the physical IoT devices and their digital counterparts.
 
-![](https://github.com/ramonfontes/blob/master/dt-802154/image.jpeg)
+![](https://github.com/ramonfontes/dt-802154/blob/main/image.jpeg)

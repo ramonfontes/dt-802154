@@ -20,17 +20,6 @@ topology = {}
 
 # Function to extract Rank + DODAGID (fixed DIO header offsets)
 def parse_dio(payload):
-    """
-    RPL DIO Header structure (RFC 6550):
-
-    Byte offset:
-      0 : RPLInstanceID        (1 byte)
-      1 : Version Number       (1 byte)
-      2-3 : Rank               (2 bytes)
-      4 : Flags                (1 byte)
-      5 : Reserved             (1 byte)
-      6-21 : DODAGID           (16 bytes)
-    """
 
     if len(payload) < 24:
         return None, None
@@ -62,10 +51,11 @@ while True:
         continue
 
     # Skip the IPv6 header (first 40 bytes) to get the DIO payload
-    dio_payload = raw[40:]
+    dio_payload = raw[4:]
 
     rank, dagid = parse_dio(dio_payload)
-    if rank is None:
+
+    if rank is None or rank is 0:
         continue
 
     print(f"\n[RECV] RPL DIO from {src_ip}")

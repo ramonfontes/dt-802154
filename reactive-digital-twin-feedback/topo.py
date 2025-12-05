@@ -14,6 +14,14 @@ def topology():
     net = Mininet_wifi()
     path = os.path.dirname(os.path.abspath(__file__))
 
+    txt_files = [f for f in os.listdir(path) if f.endswith(".txt")]
+    for f in txt_files:
+        try:
+            os.remove(os.path.join(path, f))
+            print(f"[CLEAN] Removed {f}")
+        except Exception as e:
+            print(f"[ERROR] Could not remove {f}: {e}")
+
     info("*** Creating nodes\n")
     sensor1 = net.addSensor('sensor1', ip6='fe80::1/64', panid='0xbeef',
                             trickle_t=5, dodag_root=True, storing_mode=2)
@@ -40,9 +48,16 @@ def topology():
     info("*** Configuring RPLD\n")
     net.configRPLD(net.sensors)
 
-    makeTerm(sensor10, title='process_rpl_phy', cmd="bash -c 'python {}/process_rpl.py phy_topo.txt lowpan0;'".format(path))
-    makeTerm(sensor10, title='compare_topo', cmd="bash -c 'python {}/compare_topo.py;'".format(path))
-    makeTerm(sensor1, title='process_rpl_virtual', cmd="bash -c 'python {}/process_rpl.py virtual_topo.txt sensor1-pan0;'".format(path))
+    makeTerm(sensor10, title='process_rpl_phy',
+             cmd="bash -c 'python {}/process_rpl.py phy_topo.txt lowpan0;'".format(path))
+    makeTerm(sensor10, title='compare_topo',
+             cmd="bash -c 'python {}/compare_topo.py;'".format(path))
+    makeTerm(sensor1, title='process_rpl_virtual',
+             cmd="bash -c 'python {}/process_rpl.py virtual_topo.txt sensor1-pan0;'".format(path))
+    makeTerm(sensor1, title='tcpdump_virtual',
+             cmd="bash -c 'tcpdump -i sensor1-pan0 -w virtual.pcap;'".format(path))
+    makeTerm(sensor10, title='tcpdump_phy',
+             cmd="bash -c 'tcpdump -i lowpan0 -w phy.pcap;'".format(path))
 
     info("*** Running CLI\n")
     CLI(net)

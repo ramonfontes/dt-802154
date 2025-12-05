@@ -30,6 +30,7 @@ def topology():
     net.configRPLD(net.sensors)
 
     makeTerm(sensor1, title='sensor1', cmd="bash -c 'python {}/sniff.py;'".format(path))
+    os.system('ip6tables -A OUTPUT -p tcp --dport 80 -j DROP')
 
     info("*** Running CLI\n")
     CLI(net)

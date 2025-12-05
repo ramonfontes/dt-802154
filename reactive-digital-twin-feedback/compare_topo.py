@@ -6,7 +6,7 @@ import time
 VIRTUAL_FILE = "virtual_topo.txt"
 PHY_FILE = "phy_topo.txt"
 CHECK_INTERVAL = 5   # check every 5 seconds
-STABLE_TIME = 30     # time required to consider topology stable
+STABLE_TIME = 60     # time required to consider topology stable
 
 def read_topo(file_path):
     """Read topology file and return a set of child-parent pairs"""
@@ -51,7 +51,7 @@ while True:
         print("[INFO] Topologies differ")
 
     if stable_counter >= STABLE_TIME:
-        print("[TRIGGER] Topology stable for 30s - we can now adjust the real network Trickle")
+        print("[TRIGGER] Topology stable for 60s - we can now adjust the real network Trickle")
         # Here you can call the function to adjust the trickle
         stable_counter = 0  # optional, if you want to reset the counter
 
@@ -69,6 +69,7 @@ while True:
         print(f"[SEND] {len(data)} bytes:", data.hex())
         sock.sendto(data, addr)
 
-        update_trickle_and_reload(30)
+        update_trickle_and_reload(60)
+        break
 
     time.sleep(CHECK_INTERVAL)

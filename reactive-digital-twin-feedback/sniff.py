@@ -13,10 +13,10 @@ def update_trickle_and_reload(value):
     """Write new trickle value and send SIGUSR1 to rpld."""
 
     # Write into the file
-    with open("/tmp/trickle.conf", "w") as f:
+    with open("/tmp/rpld_trickle.conf", "w") as f:
         f.write(f"trickle_t={value}\n")
 
-    print(f"[UPDATE] trickle_t set to {value} in /tmp/trickle.conf")
+    print(f"[UPDATE] trickle_t set to {value} in /tmp/rpld_trickle.conf")
 
     # Send SIGUSR1 signal
     try:
